@@ -6,7 +6,7 @@ public class Conectados {
 	private static Conectados instance =  new Conectados();
 	private LinkedList<EstacionTrabajo> listaConectados = new LinkedList<EstacionTrabajo>();
 	
-	private Conectados(){
+	private Conectados(){ 
 		
 	}
 	
