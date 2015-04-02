@@ -24,10 +24,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-class Ventana extends JFrame  {
+class Ventana extends JFrame implements ActionListener {
 	
-	
-  
+	 
   JLabel labelAreaEntrada;
   JLabel labelAreaSalida;
   JButton boton1;
@@ -115,20 +114,6 @@ private void iniciaComponentes() {
   add(boton1);
    
 }
-public void actionPerformed(ActionEvent e) {
-    if (e.getSource()==boton1) {
-        System.exit(0);
-    	/*try {
-			Runtime.getRuntime().exec("javac C:\\Users\\ASUS\\Documents\\casa.java");
-			Process p = Runtime.getRuntime().exec("java C:\\Users\\ASUS\\Documents\\casa");
-			System.out.println(p.toString());
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}*/
-    	
-    }
-}
 
 
 	public void iniciarMenu() {
@@ -136,7 +121,7 @@ public void actionPerformed(ActionEvent e) {
 		JMenuBar menu = new JMenuBar();
 
 		JMenu archivo = new JMenu("Archivo");
-		//JMenu ayuda = new JMenu("Compilar");
+		
 
 		JMenuItem nuevo = new JMenuItem("Nuevo");
 		JMenuItem abrir = new JMenuItem("Abrir...");
@@ -152,8 +137,7 @@ public void actionPerformed(ActionEvent e) {
 		//ayuda.add(acercaDe);
 
 		menu.add(archivo);
-		//menu.add(ayuda);
-
+		
 		// Añade la barra de menu a la ventana
 			setJMenuBar(menu);
 
@@ -163,7 +147,7 @@ public void actionPerformed(ActionEvent e) {
 			public void actionPerformed(ActionEvent ae) {
 				//areaEntradaDeTexto.setText("");
 				String file= "C:\\Users\\ASUS\\Documents\\compilador.java";
-				String file2= "C:\\Users\\ASUS\\Documents\\compilador";
+				//String file2= "C:\\Users\\ASUS\\Documents\\compilador";
 				try {
 					Process compilacion = Runtime.getRuntime().exec("javac "+ file);
 				    try {
@@ -177,62 +161,37 @@ public void actionPerformed(ActionEvent e) {
 
 		            
 		            // Read command standard output
-		            String s;
+		            String s= null;
 		            System.out.println("Standard output: ");
-		            while ((s = stdInput.readLine()) != null) {
-		                System.out.println(s);
-		                if (s.length() > 0)
-		                	areaSalidaDeTexto.setText(s);
+		            s = stdInput.readLine();
+		            		if (s == null){
+		            		areaSalidaDeTexto.append("Exitoso ");
 		            }
-
-		            // Read command errors
-		            System.out.println("Standard error: ");
-		            while ((s = stdError.readLine()) != null) {
+		            while ((s = stdInput.readLine()) == null) {
 		               
-		                if (s.length() > 0)
-		                	areaSalidaDeTexto.setText("Errores: NO fine  "+s);
-		            }
-
-					System.out.println("termino compilacion.....");
-					
-					Process ejecucion = Runtime.getRuntime().exec("java "+ file2);
-					try {
-						ejecucion.waitFor();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					BufferedReader stdInput2 = new BufferedReader(new InputStreamReader(ejecucion.getInputStream()));
-					BufferedReader stdError2 = new BufferedReader(new InputStreamReader(ejecucion.getErrorStream()));
-
-		            // Read command standard output
-		            s = "";
-		            System.out.println("Standard output: ");
-		            while ((s = stdInput2.readLine()) != null) {
-		                System.out.println(s);
-		                if (s.length() > 0)
-		                	areaSalidaDeTexto.setText(s);
+		                if (s==null)
+		                	areaSalidaDeTexto.append(s.toString());
 		            }
 
 		            // Read command errors
+		            s= null;
 		            System.out.println("Standard error: ");
-		            while ((s = stdError2.readLine()) != null) {
-		                System.out.println("Noooooo Todo fine!!!" + s);
-
-		                if (s.length() > 0)
-		                	areaSalidaDeTexto.setText("Errores: "+s);
+		            if((s = stdError.readLine()) != null){
+		            	areaSalidaDeTexto.append("Errores ");
+			            	
 		            }
-					
-					
-				} catch (IOException e1) {
+		            while ((s = stdError.readLine()) != null) {
+		            	areaSalidaDeTexto.append(s.toString());
+	                	System.out.println(s);
+		             }
+		            	System.out.println("termino compilacion.....");
+					} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
 		});
 
-		
-		
 		abrir.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -256,8 +215,10 @@ public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
+		
 
 	}
+	
 
 	public void abrirArchivo() throws IOException {
 		JFileChooser fileChooser = new JFileChooser();
@@ -322,6 +283,12 @@ public void actionPerformed(ActionEvent e) {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
  
 
