@@ -24,12 +24,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-class Ventana extends JFrame implements ActionListener {
+class Ventana extends JFrame {
 	
 	 
   JLabel labelAreaEntrada;
   JLabel labelAreaSalida;
-  JButton boton1;
+  JButton compilar;
+  JButton ejecutar;
+  JButton salir;
+  
   JLabel labelContadorVocales;
   JTextArea areaEntradaDeTexto;
   JScrollPane scrollPaneAreaEntrada;
@@ -101,19 +104,29 @@ private void iniciaComponentes() {
   labelContadorVocales = new JLabel();
   labelContadorVocales.setBounds(380, 280, 190, 20);
    
-  boton1=new JButton("Compilar");
-  boton1.setBounds(890,860,100,25);
- 
- 
+  compilar = new JButton("Compilar");
+  compilar.setBounds(890,860,100,25);
+  
+  
+  
+  ejecutar = new JButton("Ejecutar");
+  ejecutar.setBounds(780,860,100,25);
+  
+  
  
   add(labelContadorVocales);
   add(labelAreaEntrada);
   add(labelAreaSalida);
   add(scrollPaneAreaEntrada);
   add(scrollPaneAreaSalida);
-  add(boton1);
+  add(compilar);
+  add(ejecutar);
+  
    
 }
+
+ 
+ 
 
 
 	public void iniciarMenu() {
@@ -145,50 +158,8 @@ private void iniciaComponentes() {
 		nuevo.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-				//areaEntradaDeTexto.setText("");
-				String file= "C:\\Users\\ASUS\\Documents\\compilador.java";
-				//String file2= "C:\\Users\\ASUS\\Documents\\compilador";
-				try {
-					Process compilacion = Runtime.getRuntime().exec("javac "+ file);
-				    try {
-						compilacion.waitFor();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					BufferedReader stdInput = new BufferedReader(new InputStreamReader(compilacion.getInputStream()));
-		            BufferedReader stdError = new BufferedReader(new InputStreamReader(compilacion.getErrorStream()));
+				areaEntradaDeTexto.setText("");
 
-		            
-		            // Read command standard output
-		            String s= null;
-		            System.out.println("Standard output: ");
-		            s = stdInput.readLine();
-		            		if (s == null){
-		            		areaSalidaDeTexto.append("Exitoso ");
-		            }
-		            while ((s = stdInput.readLine()) == null) {
-		               
-		                if (s==null)
-		                	areaSalidaDeTexto.append(s.toString());
-		            }
-
-		            // Read command errors
-		            s= null;
-		            System.out.println("Standard error: ");
-		            if((s = stdError.readLine()) != null){
-		            	areaSalidaDeTexto.append("Errores ");
-			            	
-		            }
-		            while ((s = stdError.readLine()) != null) {
-		            	areaSalidaDeTexto.append(s.toString());
-	                	System.out.println(s);
-		             }
-		            	System.out.println("termino compilacion.....");
-					} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
 			}
 		});
 
@@ -216,7 +187,81 @@ private void iniciaComponentes() {
 			}
 		});
 		
-
+		compilar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				String file= "C:\\Users\\ASUS\\Documents\\compilador.java";
+				
+				try {
+					Process compilacion = Runtime.getRuntime().exec("javac "+ file);
+				   
+					BufferedReader stdInput = new BufferedReader(new InputStreamReader(compilacion.getInputStream()));
+		            BufferedReader stdError = new BufferedReader(new InputStreamReader(compilacion.getErrorStream()));
+		            
+		            // Read command standard output
+		            String s= null;
+		            System.out.println("Standard output: ");
+		            s = stdInput.readLine();
+		            if (s == null && stdError.readLine() == null){
+		            	areaSalidaDeTexto.append("Compilación Exitosa");
+		            }else{
+		            	areaSalidaDeTexto.append("Errores en Compliación: ");
+		            	
+		            	while ((s = stdError.readLine()) != null) {
+				            areaSalidaDeTexto.append(s);
+			                System.out.println(s);
+				        }
+		            }
+		           
+		            // Read command errors
+		            //s= null;
+		            
+		            //System.out.println("Standard error: ");
+		            
+		            System.out.println("termino compilacion.....");
+					} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}	
+			}	
+		});
+		
+		ejecutar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				String file= "C:\\Users\\ASUS\\Documents\\compilador";
+				
+				try {
+					Process compilacion = Runtime.getRuntime().exec("java "+ file);
+				   
+					BufferedReader stdInput = new BufferedReader(new InputStreamReader(compilacion.getInputStream()));
+		            BufferedReader stdError = new BufferedReader(new InputStreamReader(compilacion.getErrorStream()));
+		            // Read command standard output
+		            String s= null;
+		            System.out.println("Standard output: ");
+		            s = stdInput.readLine();
+		            if (s != null && stdError.readLine() == null){
+		            	areaSalidaDeTexto.append("Ejecición Exitosa");
+		            	while ((s = stdError.readLine()) != null) {
+				            areaSalidaDeTexto.append(s);
+			                System.out.println(s);
+				        }
+		            }else{
+		            	areaSalidaDeTexto.append("Errores en Compliación: ");
+		            	while ((s = stdError.readLine()) != null) {
+				            areaSalidaDeTexto.append(s);
+			                System.out.println(s);
+				        }
+		            }
+		            	System.out.println("Termino Ejecución.....");
+					} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 	}
 	
 
@@ -285,11 +330,7 @@ private void iniciaComponentes() {
 		}
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	
  
 
 }
