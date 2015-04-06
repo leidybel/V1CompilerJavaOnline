@@ -234,7 +234,7 @@ private void iniciaComponentes() {
 				String file= "C:\\Users\\ASUS\\Documents\\compilador";
 				
 				try {
-					Process compilacion = Runtime.getRuntime().exec("java "+ file);
+					Process compilacion = Runtime.getRuntime().exec("javac "+ file);
 				   
 					BufferedReader stdInput = new BufferedReader(new InputStreamReader(compilacion.getInputStream()));
 		            BufferedReader stdError = new BufferedReader(new InputStreamReader(compilacion.getErrorStream()));
