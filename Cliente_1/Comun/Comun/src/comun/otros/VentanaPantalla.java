@@ -19,8 +19,6 @@ public class VentanaPantalla extends JFrame implements Runnable{
 	
 	private static final long serialVersionUID = 1L;
 	
-
-
 	private Control cr;
 	private JLabel lblImg;
 	private boolean estado;
@@ -92,7 +90,7 @@ public class VentanaPantalla extends JFrame implements Runnable{
     public void run() {
         try {
         	
-        	System.out.println("inicio hilo ventana pantalla remota");
+        	System.out.println("inicio hilo ventana pantalla");
         	this.estado = true;
         	repaint();
 			this.MostrarVentanaPantalla();
