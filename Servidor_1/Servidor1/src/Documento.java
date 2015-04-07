@@ -48,8 +48,8 @@ public class Documento extends JFrame  {
     ventana = new JFrame("JavaCompilerOnline");
     
    dime=java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-   int al=(int)dime.getWidth();
-   int an=(int)dime.getHeight();
+   int an=(int)dime.getWidth();
+   int al=(int)dime.getHeight();
       
         // Cra un area de texto con scroll y lo añade a la ventana 
         notas1 = new JTextArea();
