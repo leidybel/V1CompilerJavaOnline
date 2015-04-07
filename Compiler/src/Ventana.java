@@ -3,13 +3,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,7 +31,8 @@ import javax.swing.JTextArea;
 class Ventana extends JFrame {
 	
 	 
-  JLabel labelAreaEntrada;
+  private static final int DEFAULT_BUFFER_SIZE = 0;
+JLabel labelAreaEntrada;
   JLabel labelAreaSalida;
   JButton compilar;
   JButton ejecutar;
@@ -81,6 +86,7 @@ private void iniciaComponentes() {
   labelAreaEntrada= new JLabel();
   labelAreaEntrada.setBounds(20, 70, 180, 40);
   labelAreaEntrada.setText("Codigo");
+  labelAreaEntrada.setFont(new java.awt.Font("Comic Sans MS", 0, 15));
    
   areaEntradaDeTexto = new JTextArea();
   areaEntradaDeTexto.setLineWrap(true);
@@ -105,12 +111,12 @@ private void iniciaComponentes() {
   labelContadorVocales.setBounds(380, 280, 190, 20);
    
   compilar = new JButton("Compilar");
-  compilar.setBounds(890,860,100,25);
+  compilar.setBounds(780,860,100,25);
+  //compilar 890
   
   
-  
-  ejecutar = new JButton("Ejecutar");
-  ejecutar.setBounds(780,860,100,25);
+  ejecutar = new JButton("Salir");
+  ejecutar.setBounds(890,860,100,25);
   
   
  
@@ -124,18 +130,10 @@ private void iniciaComponentes() {
   
    
 }
-
- 
- 
-
-
 	public void iniciarMenu() {
 		System.out.println("ENRO MENU");
 		JMenuBar menu = new JMenuBar();
-
 		JMenu archivo = new JMenu("Archivo");
-		
-
 		JMenuItem nuevo = new JMenuItem("Nuevo");
 		JMenuItem abrir = new JMenuItem("Abrir...");
 		JMenuItem guardar = new JMenuItem("Guardar");
@@ -147,8 +145,7 @@ private void iniciaComponentes() {
 		archivo.add(abrir);
 		archivo.add(guardar);
 		archivo.add(salir);
-		//ayuda.add(acercaDe);
-
+		
 		menu.add(archivo);
 		
 		// AÃ±ade la barra de menu a la ventana
@@ -190,81 +187,58 @@ private void iniciaComponentes() {
 		compilar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				String file= "C:\\Users\\ASUS\\Documents\\compilador.java";
-				
-				try {
-					Process compilacion = Runtime.getRuntime().exec("javac "+ file);
+				if(areaEntradaDeTexto.getText().length()>0){
+					areaSalidaDeTexto.setText("");
+					String ruta = null,nombar=null, cad1 = null;
+					String [] cad;
+					cad1 = areaEntradaDeTexto.getText();
+					cad = cad1.split(" ");
+					nombar = cad[2].trim();
+					if(nombar.contains("{")){
+						nombar = nombar.replace("{", "");
+					}
+					String file= nombar;
+					ruta = guardar(file);
+					try {
+						Process compilacion = Runtime.getRuntime().exec("javac "+ ruta);
 				   
-					BufferedReader stdInput = new BufferedReader(new InputStreamReader(compilacion.getInputStream()));
-		            BufferedReader stdError = new BufferedReader(new InputStreamReader(compilacion.getErrorStream()));
+						BufferedReader stdInput = new BufferedReader(new InputStreamReader(compilacion.getInputStream()));
+						BufferedReader stdError = new BufferedReader(new InputStreamReader(compilacion.getErrorStream()));
 		            
-		            // Read command standard output
-		            String s= null;
-		            System.out.println("Standard output: ");
-		            s = stdInput.readLine();
-		            if (s == null && stdError.readLine() == null){
-		            	areaSalidaDeTexto.append("Compilación Exitosa");
-		            }else{
-		            	areaSalidaDeTexto.append("Errores en Compliación: ");
+						String s= null;
+						//System.out.println("Standard output: ");
+						s = stdInput.readLine();
+						if (s == null && stdError.readLine() == null){
+							areaSalidaDeTexto.append("Compilación Exitosa");
+						}else{
+							areaSalidaDeTexto.append("\n"+"Errores en Compilación: " + "\n");
 		            	
-		            	while ((s = stdError.readLine()) != null) {
-				            areaSalidaDeTexto.append(s);
-			                System.out.println(s);
-				        }
-		            }
-		           
-		            // Read command errors
-		            //s= null;
-		            
-		            //System.out.println("Standard error: ");
-		            
-		            System.out.println("termino compilacion.....");
+							while ((s = stdError.readLine()) != null) {
+								areaSalidaDeTexto.append("\n"+s + "\n");
+								//System.out.println(s);
+							}
+						}
+		         
+						areaSalidaDeTexto.append("termino compilacion.....");
 					} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}	
+						e1.printStackTrace();
+					}	
+				}else{
+						JOptionPane.showMessageDialog(null, "Debe ingresar codigo para compilar",
+								  "Error", JOptionPane.WARNING_MESSAGE);
+				}
 			}	
 		});
 		
 		ejecutar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				String file= "C:\\Users\\ASUS\\Documents\\compilador";
-				
-				try {
-					Process compilacion = Runtime.getRuntime().exec("javac "+ file);
-				   
-					BufferedReader stdInput = new BufferedReader(new InputStreamReader(compilacion.getInputStream()));
-		            BufferedReader stdError = new BufferedReader(new InputStreamReader(compilacion.getErrorStream()));
-		            // Read command standard output
-		            String s= null;
-		            System.out.println("Standard output: ");
-		            s = stdInput.readLine();
-		            if (s != null && stdError.readLine() == null){
-		            	areaSalidaDeTexto.append("Ejecición Exitosa");
-		            	while ((s = stdError.readLine()) != null) {
-				            areaSalidaDeTexto.append(s);
-			                System.out.println(s);
-				        }
-		            }else{
-		            	areaSalidaDeTexto.append("Errores en Compliación: ");
-		            	while ((s = stdError.readLine()) != null) {
-				            areaSalidaDeTexto.append(s);
-			                System.out.println(s);
-				        }
-		            }
-		            	System.out.println("Termino Ejecución.....");
-					} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				System.exit(0);
 				}
-			}
-		});
-	}
+			});
+		}
 	
-
+	
 	public void abrirArchivo() throws IOException {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -330,7 +304,36 @@ private void iniciaComponentes() {
 		}
 	}
 
-	
+	public String guardar(String nombre){
+		String ruta = "D:\\"+nombre.concat(".java");
+		File archivo = new File(ruta);
+		System.out.println("asi se llamara " +archivo);
+		try{
+			archivo.createNewFile();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
+		FileWriter escritor = null;
+		
+		try {
+			escritor = new FileWriter(archivo);
+			escritor.write(areaEntradaDeTexto.getText());
+		} catch (FileNotFoundException ex) {
+			Logger.getLogger(Interface.class.getName()).log(Level.SEVERE,
+					null, ex);
+		} catch (IOException ex) {
+			Logger.getLogger(Interface.class.getName()).log(Level.SEVERE,
+				null, ex);
+		} finally {
+			try {
+				escritor.close();
+			} catch (IOException ex) {
+				Logger.getLogger(Interface.class.getName()).log(
+						Level.SEVERE, null, ex);
+			}
+		}
+		return ruta;
+	}
  
-
 }
