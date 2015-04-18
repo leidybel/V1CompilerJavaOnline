@@ -14,7 +14,8 @@
 	<!-- A JMS connection factory for ActiveMQ -->
 	<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
 		<property name="brokerURL">
-			<value>tcp://192.168.0.4:61616</value>
+
+			<value>tcp://10.2.67.104:61616</value>
 		</property>
 	</bean>
 
@@ -30,7 +31,6 @@
 
 	<bean id="producerTemplate" class="org.springframework.jms.core.JmsTemplate"
 		p:connectionFactory-ref="connectionFactory" p:defaultDestination-ref="destinationt" />
-
 
 	<bean id="producer" class="MyJMSProducer">
 		<property name="jmsTemplate" ref="producerTemplate"></property>

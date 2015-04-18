@@ -41,7 +41,6 @@ public class Documento extends JFrame  {
     JTextArea notas2;
     JScrollPane scrollNotas1;
     JScrollPane scrollNotas2;
-    private String letras = "";
     Dimension dime;
    
     public void inicioDoc () {
@@ -194,6 +193,4 @@ public class Documento extends JFrame  {
             }
         }
     }  
-    
-
-}
+ }
