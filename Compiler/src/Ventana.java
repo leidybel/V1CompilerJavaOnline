@@ -76,13 +76,13 @@ private void iniciaComponentes() {
     Dimension dime = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
    int al=(int)dime.getWidth();
    int an=(int)dime.getHeight();
-   System.out.print("alto"+ al);
-   System.out.print("ancho"+ an);
+   
+   System.out.print("alto "+ al);
+   System.out.print("ancho "+ an);
    
     
-
-   setTitle("JavaCompilerOnline");
-   setSize(1050,1000);
+  setTitle("JavaCompilerOnline");
+  setSize(al,an);
   labelAreaEntrada= new JLabel();
   labelAreaEntrada.setBounds(20, 70, 180, 40);
   labelAreaEntrada.setText("Codigo");
@@ -92,34 +92,32 @@ private void iniciaComponentes() {
   areaEntradaDeTexto.setLineWrap(true);
    
   scrollPaneAreaEntrada = new JScrollPane();
-  scrollPaneAreaEntrada.setBounds(10, 100, 1000,350 );
+  scrollPaneAreaEntrada.setBounds(10, 100, 1560,230 );
   scrollPaneAreaEntrada.setViewportView(areaEntradaDeTexto);
          
   labelAreaSalida= new JLabel();
-  labelAreaSalida.setBounds(20, 170, 180, 600);
+  labelAreaSalida.setBounds(20, 70, 180, 600);
   labelAreaSalida.setText("Consola");
+  labelAreaSalida.setFont(new java.awt.Font("Comic Sans MS", 0, 15));
+  
    
   areaSalidaDeTexto = new JTextArea();
   areaSalidaDeTexto.setLineWrap(true);
   
    
   scrollPaneAreaSalida = new JScrollPane();
-  scrollPaneAreaSalida.setBounds(10, 500, 1000, 350);
+  scrollPaneAreaSalida.setBounds(10, 400, 1560, 230);
   scrollPaneAreaSalida.setViewportView(areaSalidaDeTexto);
   
   labelContadorVocales = new JLabel();
   labelContadorVocales.setBounds(380, 280, 190, 20);
    
   compilar = new JButton("Compilar");
-  compilar.setBounds(780,860,100,25);
-  //compilar 890
-  
+  compilar.setBounds(680,660,100,25);
   
   ejecutar = new JButton("Salir");
-  ejecutar.setBounds(890,860,100,25);
+  ejecutar.setBounds(890,660,100,25);
   
-  
- 
   add(labelContadorVocales);
   add(labelAreaEntrada);
   add(labelAreaSalida);
