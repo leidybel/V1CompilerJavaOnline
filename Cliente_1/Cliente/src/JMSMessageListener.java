@@ -9,12 +9,12 @@ public class JMSMessageListener implements MessageListener{
 	
 	public JMSMessageListener() {
 		super();
-		System.out.println("Esperando conexión de estudiantes...");
+		System.out.println("Esperando conexión...");
 	}
 
 	@Override
 	public void onMessage(Message m) {
-		ActiveMQObjectMessage om=(ActiveMQObjectMessage)m; 
+		ActiveMQObjectMessage om =(ActiveMQObjectMessage)m; 
 		try {
 			EstacionTrabajo receivedObject=(EstacionTrabajo)om.getObject();
 			conectados.agregarConectado(receivedObject);

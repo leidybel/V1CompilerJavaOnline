@@ -32,8 +32,6 @@ public class Conectados {
 		return instance;
 	}
 	
-
-	
 	public void VerificarConectados() throws IOException{
 		for (int i = 0; i < this.listaConectados.size(); i++) {
 			if(this.listaConectados.get(i).isConectado()==false){

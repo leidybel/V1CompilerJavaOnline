@@ -22,7 +22,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import comun.control.Control;
-import comun.otros.DemandanteRmi;
+import comun.otros.Demandante;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -43,7 +43,7 @@ public class MainCliente {
 	private Conectados conectados = Conectados.getInstance();
 	private EstacionTrabajo sesion = new EstacionTrabajo();
 	private String nombreEstacionTrabajo = null;
-	private DemandanteRmi dRmi ;
+	private Demandante dRmi ;
 	private Control cSesion;
 	private Thread hiloCapturaDocumento;
 	private VentanaPantalla vpr = null;
@@ -136,7 +136,7 @@ public class MainCliente {
 					
 					try {
 						
-						dRmi = new DemandanteRmi(sesion.getIp(), sesion.getPuerto());
+						dRmi = new Demandante(sesion.getIp(), sesion.getPuerto());
 						dRmi.DemandarObjeto(sesion.getNombreObjeto());
 						cSesion = (Control) dRmi.getObjeto();
 						
@@ -318,7 +318,7 @@ public class MainCliente {
 			}
 		}
 		else{
-			JOptionPane.showMessageDialog(null, "Ningun alumno inicia a�n sesi�n", null, 0);
+			JOptionPane.showMessageDialog(null, "Ningun inicia a�n sesi�n", null, 0);
 		}		
 	}
 
